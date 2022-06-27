@@ -1,0 +1,160 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<style>
+    table {
+    border-collapse: separate;
+    border-spacing: 1px;
+    text-align: center;
+    line-height: 1.5;
+    border-top: 2px solid #ccc;
+    margin: 20px 10px;
+    width:100%;
+    }
+    table th {
+    width: 150px;
+    padding: 10px;
+    font-weight: bold;
+    font-size:17px;
+    vertical-align: top;
+    border-bottom: 2px solid #ccc;
+    background: #efefef;
+    }
+    table td {
+    font-size:15px;
+    width: 350px;
+    padding: 10px;
+    vertical-align: top;
+    border-bottom: 2px solid #ccc;
+    }
+
+#gold-1{
+    position: absolute;
+    top: 550px;
+    left: 500px;
+}
+
+#gold-2{
+    position: absolute;
+    top: 550px;
+    left: 650px;
+}
+
+.total-gold{
+    position: absolute;
+    font-size: 30px;
+    top: 180px;
+    left: 650px;
+}
+
+.my-gold{
+    position: absolute;
+    font-size: 30px;
+    top: 420px;
+    left: 650px;
+    font-weight: bold;
+}
+
+.my-gold2{
+    position: absolute;
+    font-size: 36px;
+    top: 373px;
+    left: 650px;
+    color: #FB8E00;
+}
+
+</style>
+
+
+
+
+<!-- TradingView Widget BEGIN -->
+<main id="main" class="main">
+<div class="pagetitle"><h1>나의 Gold 확인하기</h1></div>
+<section class="section">
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="card">
+                <div class="card-body">
+                    <img src="../../../assets/img/mygold.png" style="margin-top: 30px;">
+                    <div class="col-rg-6" style="text-align:center;">
+                        <span>   
+                            {% comment %} <button type="button" class="btn btn-outline-light text-dark" style="font-weight:bold; margin-right:8%; border-color:#f9eeb6; font-size:15px;">금 사기</button> {% endcomment %}
+                            <button type="button" id="gold-1" class="btn" data-toggle="modal" data-target="#myModal"  style="margin-top:30px; background:rgb(205, 45, 55); color:white;">금 사기</button>
+                            <button type="button" id="gold-2" class="btn btn-primary" data-toggle="modal" data-target="#myModal"  style="margin-top:30px; background:rgb(1, 51, 191);">금 팔기</button>
+                            {% comment %} <button type="button" class="btn btn-outline-light text-dark" style="font-weight:bold; border-color:#f9eeb6; font-size:15px;">금 팔기</button> {% endcomment %}
+                        </span>
+                        <div class="total-gold">
+                            <p>
+                                <b>{{sum_total2}}g</b>
+                            </p>
+                        </div>
+
+                        <div class="my-gold2">
+                            <p>
+                                <b>{{user.success}}</b>
+                            </p>
+                        </div>
+
+                        <div class="my-gold" id="my-gold">
+                            <p>
+                                <b>{{user_success}}g</b>
+                            </p>
+                        </div>
+
+
+                </div>
+            </div>
+        </div>
+
+
+
+
+
+        <div class="col-lg-12">
+            <div class="card">
+                <div class="card-body">
+                    <div id='gold_graph'>
+                        <h4 class="card-title" style="font-weight:bold;">실시간 골드 시세</h4>
+                        <!-- TradingView Widget BEGIN -->
+                        <div class="tradingview-widget-container" style="height:700px;">
+                            <script type="text/javascript" src="https://s3.tradingview.com/tv.js"></script>
+                            <script type="text/javascript">
+                                new TradingView.widget(
+                                    {
+                                    "autosize": true,
+                                    "symbol": "OANDA:XAUUSD",
+                                    "timezone": "Asia/Seoul",
+                                    "theme": "light",
+                                    "style": "1",
+                                    "locale": "kr",
+                                    "toolbar_bg": "#f1f3f6",
+                                    "enable_publishing": true,
+                                    "withdateranges": true,
+                                    "range": "YTD",
+                                    "hide_side_toolbar": false,
+                                    "allow_symbol_change": true,
+                                    "details": true,
+                                    "hotlist": true,
+                                    "calendar": true,
+                                    "show_popup_button": true,
+                                    "popup_width": "1000",
+                                    "popup_height": "650",
+                                    "container_id": "tradingview_1b7ac"
+                                });
+                            </script>
+                        </div>
+                    </div>
+<!-- TradingView Widget END -->
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+</main>
+
+
+
+
+<!-- TradingView Widget END -->
+{% endblock content %}

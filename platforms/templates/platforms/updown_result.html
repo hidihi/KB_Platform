@@ -1,0 +1,23 @@
+<div class="user-wrap">
+    <div class="user-image">
+        <!-- 실제 결과 값이 하락일 때 -->
+        {% if act == 0 %}
+            <!-- 나의 예측 값이 하락일 때 -->
+            {% if user_act == 0 %}
+            <img src="../../../assets/img/updown_result_하하.png" width="900">
+            <!-- 나의 예측 값이 상승 일 때 -->
+            {% else %}
+            <img src="../../../assets/img/updown_result_상하.png" width="900">
+            {% endif %}
+        <!-- 실제 결과 값이 상승일 때 -->
+        {% else %}
+            <!-- 나의 예측 값이 하락일 때 -->
+            {% if user_act == 0 %}
+            <img src="../../../assets/img/updown_result_하상.png" width="900">
+            <!-- 나의 예측 값이 상승일 때 -->
+            {% else %}
+            <img src="../../../assets/img/updown_result_상상.png" width="900">
+            {% endif %}
+        {% endif %}
+    </div>
+</div>

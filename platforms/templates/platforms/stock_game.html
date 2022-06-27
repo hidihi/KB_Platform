@@ -1,0 +1,374 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<script>
+  
+  // 출석체크 팝업 페이지
+  function showPopup(){
+      window.open("{% url 'platforms:attendance' %}","팝업 테스트","width=920, height=920, top=50, left=520");
+  }
+
+  // 결과예측 팝업 페이지
+  function updown_result(){
+      window.open("{% url 'platforms:updown_result' %}","팝업 테스트","width=920, height=920, top=50, left=520");
+  }
+
+  $(function(){
+    $('#img_btn3').on('click', function(){
+      $('#img_btn3').remove();
+      $('#push_q').remove();
+      $('#spinnerBtn2').show();
+      setTimeout(function(){
+        $('#spinnerBtn2').hide();
+        $('#test_img').show();
+        $('#warning').show()
+      }, 700);
+    });
+  });
+
+  function get_updown() {
+    var st = $(":input:radio[name=answer]:checked").val();
+    var get = $("#checkHere").val();
+ 
+    if (get == 'yes'){
+      alert('이미 게임에 응모하셨습니다.');
+    }
+
+    else{
+      if (st == "상승"){
+        var submit = confirm('상승에 응모하시겠습니까?');
+        if (submit==true){
+          alert('응모가 완료되었습니다.');
+        }
+        else if (submit==false){
+          alert('취소되었습니다.')
+        }
+      }
+      else{
+        var submit = confirm('하락에 응모하시겠습니까?');
+        if (submit==true){
+          alert('응모가 완료되었습니다.');
+        }
+        else if (submit==false){
+          alert('취소되었습니다.')
+        }
+      }
+    }
+  }
+
+function submit(){
+  // var res = document.getElementsByID('answer');
+  var st = $(":input:radio[name=answer]:checked").val();
+
+  if (st == "상승"){
+    var submit = confirm('상승에 응모하시겠습니까?');
+    if (submit==true){
+      alert('응모가 완료되었습니다.');
+    }
+    else if (submit==false){
+      alert('취소되었습니다.')
+    }
+  }
+  else{
+    var submit = confirm('하락에 응모하시겠습니까?');
+    if (submit==true){
+      alert('응모가 완료되었습니다.');
+    }
+    else if (submit==false){
+      alert('취소되었습니다.')
+    }
+  }
+}
+</script>
+
+
+<main id="main" class="main">
+<section class="section">
+  <div class="row">
+    <div class="col-lg-12">
+      <div class="card" style="height: 2200px;">
+        <div class="card-body" >
+          <img src="../../../assets/img/test.png" image-rendering: -webkit-optimize-contrast style="margin-top: 20px;">
+            <div class="tradingview-widget-container" style="height:700px;">
+              <script type="text/javascript" src="https://s3.tradingview.com/tv.js"></script>
+              <script type="text/javascript">
+                  new TradingView.widget({
+                      "autosize": true,
+                      "symbol": "KRX:105560",
+                      "timezone": "Etc/UTC",
+                      "theme": "light",
+                      "style": "1",
+                      "locale": "kr",
+                      "toolbar_bg": "#f1f3f6",
+                      "enable_publishing": true,
+                      "withdateranges": true,
+                      "range": "YTD",
+                      "hide_side_toolbar": false,
+                      "allow_symbol_change": true,
+                      "details": true,
+                      "hotlist": true,
+                      "calendar": true,
+                      "show_popup_button": true,
+                      "popup_width": "1000",
+                      "popup_height": "650",
+                      "container_id": "tradingview_72e7d"
+                  });
+              </script>
+            </div>
+            <br>
+            <div style="text-align: center;">
+              <button onclick="showPopup();" button type="button" class="btn btn-warning" data-toggle="modal" data-target="#myModal"  style="margin-top:15px; background: #ffffff; border: 0;" id="btn-check"><b>종가 예측 UP&DOWN 안내사항 및 출석체크</b></button>
+            </div>
+            <br><br>
+            <div class="stock">
+            <form action="{% url 'platforms:setResult' %}" method="post">
+              {% csrf_token %}
+              <input type="radio" id="radioUp" name="answer" value="상승" style="margin:auto; width:20px;height:20px;border:1px;" > 
+              <input type="radio" id="radioDown" name="answer" value="하락"  style="margin:auto; width:20px;height:20px;border:1px;">
+
+              <button type="button" class="btn_image" id="img_btn3" style="border: 0;background-color: #ffffff;"><img src="../../../assets/img/q.png"></button>
+              <div id="spinnerBtn2" class="spinner-border text-warning" style="margin-left:auto; margin-right:auto; margin-bottom:20px; display:none;"></div>
+              {% if pred == 0 %}
+              <img src="../../../assets/img/ai하락.png" id="test_img" style="display: none;">
+              {% else %}
+              <img src="../../../assets/img/ai상승.png" id="test_img" style="display: none;">
+              {% endif %}
+              
+            </div>
+            <span id='checkHere' value='not'> </span>
+              {% if tmp == 0 %}
+              <script>
+                var get = document.getElementById('checkHere');
+                get.value = 'yes';
+              </script>
+              {% endif %}
+              <input type="image" src="../../../assets/img/응모.png" / id="btn-4" onclick="get_updown(), submit()">
+              <input type="image" src="../../../assets/img/결과.png" / id="btn-5" onclick="updown_result();">  
+            </form>
+          </div>
+                <img src="../../../assets/img/point.png" id="point">
+                <img src="../../../assets/img/push_q.png" id="push_q">
+                <img src="../../../assets/img/경고문.png" id="warning" style="display: none;">
+            </div>
+        </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header">
+        <form action="">
+          <div class="col-md-12">
+              {% csrf_token %}
+              <div class="form-group row">
+                  <textarea class="form-control" id="content_id" rows="3" placeholder="댓글을 입력해주세요."></textarea>
+              </div>
+              <div class="text-right" style="float:right">
+                  <button id="comment_write" class="btn btn-sm">댓글달기</button>
+              </div>
+          </div>
+          <hr>
+          <div id="more_comment">
+              {% if comments %}
+                  {% for comment in comments %}
+                  <div id='{{ comment.id }}'>
+                      {% if comment.deleted %}
+                      <span>삭제된 댓글입니다.</span><hr>
+                      {% else %}
+                          {% if comment.writer == free.writer %}
+                          <strong>{{ comment.writer }}&nbsp;<span>(글쓴이)</span></strong>
+                          {% else  %}
+                          <strong>{{ comment.writer }}</strong>
+                          {% endif %}
+                          <span style="float:right">{{ comment.created }}</span>
+                          {% if comment.writer == request.user or request.user.level == '0' or request.user.level == '1' %}
+                          <div>
+                              <div style="white-space:pre-wrap; text-align:left;">{{ comment.content }}</div>
+                              <div style="text-align: right;">
+                                  <a onclick="commentDelete('{{comment.id}}');">댓글삭제</a>
+                              </div>
+                          </div>
+                          <hr>
+                          {% else %}
+                          <div>
+                              <div style="white-space:pre-wrap; text-align:left;">{{ comment.content }}</div>
+                          </div>
+                          <hr>
+                          {% endif %}
+                      {% endif %}
+                  </div>
+                  <div class='{{ comment.id }}'></div>
+                  {% endfor %}
+              {% endif %}
+              <input type="hidden" id="comment_writer" value={{request.user}}>
+              <div id="comment_list"></div>
+          </div>
+        </form>
+      </div>
+  </div>
+
+
+
+</section>
+</main>
+<!-- TradingView Widget END -->
+
+<style>
+    .where {
+  display: block;
+  margin: 25px 15px;
+  font-size: 11px;
+  color: #000;
+  text-decoration: none;
+  font-family: verdana;
+  font-style: italic;
+} 
+
+.checks {position: relative;}
+.checks input[type="radio"] {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip:rect(0,0,0,0);
+  border: 0;
+}
+.checks input[type="radio"] + label {
+  display: inline-block;
+  position: relative;
+  padding-left: 30px;
+  cursor: pointer;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+}
+.checks input[type="radio"] + label:before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: -4px;
+  width: 21px;
+  height: 21px;
+  text-align: center;
+  background: #fafafa;
+  border: 1px solid #cacece;
+  border-radius: 100%;
+  box-shadow: 0px 1px 2px rgba(0,0,0,0.05), inset 0px -15px 10px -12px rgba(0,0,0,0.05);
+}
+.checks input[type="radio"] + label:active:before,
+.checks input[type="radio"]:checked + label:active:before  {
+  box-shadow: 0 1px 2px rgba(0,0,0,0.05), inset 0px 1px 3px rgba(0,0,0,0.1);
+}
+.checks input[type="radio"]:checked + label:before {
+  background: #E9ECEE;
+  border-color: #adb8c0;
+}
+.checks input[type="radio"]:checked + label:after {
+  content: '';
+  position: absolute;
+  top: 1px;
+  left: 5px;
+  width: 13px;
+  height: 13px;
+  background: #99a1a7;
+  border-radius: 100%;
+  box-shadow: inset 0px 0px 10px rgba(0,0,0,0.3);
+}
+
+
+#radioUp {
+  position: absolute;
+  top: 1910px;
+  left : 440px; 
+}
+
+#radioDown {
+  position: absolute;
+  top: 1910px;
+  left : 805px;
+}
+
+.card-body{
+  /* background: rgb(255,192,80); */
+  border-radius: 2%;
+  /* background-image: url('../assets/img/test.png'); */
+  background-size: 100% 100%;
+}
+
+.tradingview-widget-container{
+  position: absolute;
+  top: 576px;
+  left : 49px;
+  width: 1150px;
+  /* margin-top: 750px; */
+}
+
+.stock{
+  margin-top: 680px;
+}
+
+#btn-check{
+  position: absolute;
+  top: 447px;
+  left: 451px;
+}
+
+#img_btn3{
+  position: absolute;
+  top: 1555px;
+  left: 602px;
+}
+
+#spinnerBtn2{
+  position: absolute;
+  top: 1565px;
+  left: 612px;
+}
+
+#test_img{
+  position: absolute;
+  top: 1555px;
+  left: 432px;
+}
+
+#btn-4{
+  position: absolute;
+  top: 2005px;
+  left: 522px;
+}
+
+#btn-5{
+  position: absolute;
+  top: 2060px;
+  left: 522px;
+}
+
+#point{
+  position: absolute;
+  top: 485px;
+  left: 785px;
+}
+
+#push_q{
+  position: absolute;
+  top: 1615px;
+  left: 435px;
+}
+
+#warning{
+  position: absolute;
+  top: 1615px;
+  left: 435px;
+}
+
+.confirm{
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+</style>
+
+
+{% endblock content %}

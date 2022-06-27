@@ -1,0 +1,111 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<style>
+  th{
+    font-size: 18px;
+}
+td{
+    font-size: 15px;
+}
+p{
+    font-size: 15px;
+}
+tr{
+    font-size : 15px;
+}
+</style>
+<script>
+  var result = 0
+</script>
+
+<main id="main" class="main">
+
+    <div class="pagetitle">
+      <h1>나의 계좌 조회</h1>
+    </div><!-- End Page Title -->
+
+    <section class="section">
+      <div class="row">
+        <div class="col-lg-12">
+
+          <div class="card">
+            <div class="card-body">
+              <hr style="color: #545045; height : 4px;">
+              <span><h5><b>{{account.acc_name}} / {{account.pk}}</b></h5></span>
+              <br>
+              {% if account.acc_name == 'KB골드투자통장' %}
+              <h1><b>{{trans_sum}}</b>g</h1>
+              {% else %}
+              <h1><b>{{trans_sum|floatformat:"0"}}</b>원</h1>
+              {% endif %}
+              <hr style="color: #545045; height : 4px;">
+              <!-- Table with stripped rows -->
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th scope="col">거래 일자</th>
+                    <th scope="col">거래 시간</th>
+                    {% if account.acc_name == 'KB골드투자통장' %}
+                    <th scope="col">출금(g)</th>
+                    <th scope="col">입금(g)</th>
+                    <th scope="col">잔액(g)</th>
+                    {% else %}
+                    <th scope="col">출금(원)</th>
+                    <th scope="col">입금(원)</th>
+                    <th scope="col">잔액(원)</th>
+                    {% endif %}
+                    <th scope="col">내용</th>
+                  </tr>
+                </thead>
+                <tbody style="font-size:12px;">
+                  {% for trans, totals in all_trans %}
+                    {% if account.acc_name == 'KB골드투자통장' %}
+                    <tr onmouseover="this.style.backgroundColor='#ffe168'" onmouseout="this.style.backgroundColor=''">
+                      <td>{{trans.trans_date|date:"Y-m-d"}}</td>
+                      <td>{{trans.trans_date|date:"h:m:s"}}</td>
+                      {% if trans.trans_price < 0 %}
+                        <td>{{trans.trans_price }}</td>
+                      {% else %}
+                        <td></td>
+                      {% endif %}
+                      {% if trans.trans_price > 0 %}
+                      <td>{{trans.trans_price }}</td>
+                      {% else %}
+                      <td></td>
+                      {% endif %}
+                      <td>{{totals}}</td>
+                      <td>{{trans.trans_content}}</td>
+                  </tr>
+                    {% else %}
+                    <tr onmouseover="this.style.backgroundColor='#ffe168'" onmouseout="this.style.backgroundColor=''">
+                        <td>{{trans.trans_date|date:"Y-m-d"}}</td>
+                        <td>{{trans.trans_date|date:"h:m:s"}}</td>
+                        {% if trans.trans_price < 0 %}
+                          <td>{{trans.trans_price|floatformat:"0"}}</td>
+                        {% else %}
+                          <td></td>
+                        {% endif %}
+                        {% if trans.trans_price > 0 %}
+                        <td>{{trans.trans_price|floatformat:"0"}}</td>
+                        {% else %}
+                        <td></td>
+                        {% endif %}
+                        <td>{{totals|floatformat:"0"}}</td>
+                        <td>{{trans.trans_content}}</td>
+                    </tr>
+                    {% endif %}
+                  {% endfor %}
+                </tbody>
+              </table>
+              <!-- End Table with stripped rows -->
+
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+  </main><!-- End #main -->
+{% endblock content %}
